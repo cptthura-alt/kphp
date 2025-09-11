@@ -21,6 +21,8 @@ struct ComponentState final : private vk::not_copyable {
   array<string> ini_opts{array_size{argc, false}};
   array<mixed> env{array_size{envc, false}};
   mixed runtime_config;
+  mixed rpc_config;
+  mixed statlogs;
 
   ComponentState() noexcept {
     parse_env();
@@ -38,6 +40,8 @@ struct ComponentState final : private vk::not_copyable {
 private:
   static constexpr std::string_view INI_ARG_PREFIX = "ini ";
   static constexpr std::string_view RUNTIME_CONFIG_ARG = "runtime-config";
+  static constexpr std::string_view RPC_CONFIG_PATH = "rpc-config";
+  static constexpr std::string_view STATLOGS_PATH = "statlogs";
   static constexpr auto INIT_COMPONENT_ALLOCATOR_SIZE = static_cast<size_t>(1024U * 1024U); // 1MB
 
   void parse_env() noexcept;
@@ -46,5 +50,5 @@ private:
 
   void parse_ini_arg(std::string_view, std::string_view) noexcept;
 
-  void parse_runtime_config_arg(std::string_view) noexcept;
+  void parse_runtime_config_arg(std::string_view, bool json, mixed& into) noexcept;
 };
